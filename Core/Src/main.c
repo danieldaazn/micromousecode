@@ -21,7 +21,8 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "Motor.h"
+#include "IR.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -44,8 +45,8 @@ ADC_HandleTypeDef hadc1;
 TIM_HandleTypeDef htim2;
 TIM_HandleTypeDef htim3;
 TIM_HandleTypeDef htim4;
-
 /* USER CODE BEGIN PV */
+int t = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -56,10 +57,17 @@ static void MX_TIM3_Init(void);
 static void MX_TIM4_Init(void);
 static void MX_ADC1_Init(void);
 /* USER CODE BEGIN PFP */
+void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+//SysTick timer
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim) {
+	if(htim->Instance == TIM2){
+		t++;
+	}
+}
 /* USER CODE END 0 */
 
 /**
@@ -97,13 +105,49 @@ int main(void)
   MX_TIM4_Init();
   MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
+  HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_3);
+  HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_4);
+  HAL_TIM_Base_Start_IT(&htim2);
+
+  HAL_TIM_Encoder_Start_IT(&htim3, TIM_CHANNEL_ALL);
+  HAL_TIM_Encoder_Start_IT(&htim4, TIM_CHANNEL_ALL);
+
+  dis_FL = measure_dist(DIST_FL);
+  dis_FR = measure_dist(DIST_FR);
+  dis_L = measure_dist(DIST_L);
+  dis_R = measure_dist(DIST_R);
+
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  while (1)
+  {
+	  HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
+
+	  HAL_GPIO_WritePin(ML_FWD_GPIO_Port, ML_FWD_Pin, GPIO_PIN_RESET);
+	  HAL_GPIO_WritePin(ML_BWD_GPIO_Port, ML_BWD_Pin, GPIO_PIN_RESET);
+
+	  //right motor drive backwards
+	  HAL_GPIO_WritePin(MR_FWD_GPIO_Port, MR_FWD_Pin, GPIO_PIN_RESET);
+	  HAL_GPIO_WritePin(MR_BWD_GPIO_Port, MR_BWD_Pin, GPIO_PIN_RESET);
+
+	  dis_FL = measure_dist(DIST_FL) * SCALE_FL;
+	  dis_FR = measure_dist(DIST_FR) * SCALE_FR;
+	  dis_L = measure_dist(DIST_L) * SCALE_L;
+	  dis_R = measure_dist(DIST_R) * SCALE_R;
+
+	  HAL_Delay(1000);
+
+
+
+
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+  }
   /* USER CODE END 3 */
 }
 
