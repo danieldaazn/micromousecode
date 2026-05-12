@@ -1,11 +1,29 @@
 #include "IR.h"
 
-ADC_ChannelConfTypeDef sConfig = {0};
+const int NOM_FORWARD = 200;
+const int NOM_DIAGONAL = 100;
+
+const int CAL_FL = 208;
+const int CAL_L = 157;
+const int CAL_FR = 96;
+const int CAL_R = 65;
+
+const float SCALE_FL    = (float)NOM_DIAGONAL / CAL_FL;
+const float SCALE_FR    = (float)NOM_DIAGONAL / CAL_FR;
+const float SCALE_L     = (float)NOM_FORWARD  / CAL_L;
+const float SCALE_R     = (float)NOM_FORWARD  / CAL_L;
 
 ADC_ChannelConfTypeDef sConfig = {0};
+
+extern ADC_HandleTypeDef hadc1;
+
+extern TIM_HandleTypeDef htim2;
+extern TIM_HandleTypeDef htim3;
+extern TIM_HandleTypeDef htim4;
+
 
 //far left
-static void ADC1_Select_CH4(void){
+void ADC1_Select_CH4(void){
 	sConfig.Channel = ADC_CHANNEL_4;
 	sConfig.Rank = ADC_REGULAR_RANK_1;
 	sConfig.SamplingTime = ADC_SAMPLETIME_7CYCLES_5;
@@ -16,7 +34,7 @@ static void ADC1_Select_CH4(void){
 };
 
 //right
-static void ADC1_Select_CH5(void){
+void ADC1_Select_CH5(void){
 	sConfig.Channel = ADC_CHANNEL_5;
 	sConfig.Rank = ADC_REGULAR_RANK_1;
 	sConfig.SamplingTime = ADC_SAMPLETIME_7CYCLES_5;
@@ -27,7 +45,7 @@ static void ADC1_Select_CH5(void){
 };
 
 //left
-static void ADC1_Select_CH8(void){
+void ADC1_Select_CH8(void){
 	sConfig.Channel = ADC_CHANNEL_8;
 	sConfig.Rank = ADC_REGULAR_RANK_1;
 	sConfig.SamplingTime = ADC_SAMPLETIME_7CYCLES_5;
@@ -38,7 +56,7 @@ static void ADC1_Select_CH8(void){
 };
 
 //far right
-static void ADC1_Select_CH9(void){
+void ADC1_Select_CH9(void){
 	sConfig.Channel = ADC_CHANNEL_9;
 	sConfig.Rank = ADC_REGULAR_RANK_1;
 	sConfig.SamplingTime = ADC_SAMPLETIME_7CYCLES_5;

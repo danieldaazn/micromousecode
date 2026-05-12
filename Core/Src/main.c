@@ -45,8 +45,13 @@ ADC_HandleTypeDef hadc1;
 TIM_HandleTypeDef htim2;
 TIM_HandleTypeDef htim3;
 TIM_HandleTypeDef htim4;
+
 /* USER CODE BEGIN PV */
 int t = 0;
+uint16_t volatile dis_FL;
+uint16_t volatile dis_FR;
+uint16_t volatile dis_L;
+uint16_t volatile dis_R;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -87,8 +92,6 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
-
-
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -111,17 +114,11 @@ int main(void)
 
   HAL_TIM_Encoder_Start_IT(&htim3, TIM_CHANNEL_ALL);
   HAL_TIM_Encoder_Start_IT(&htim4, TIM_CHANNEL_ALL);
-
-  dis_FL = measure_dist(DIST_FL);
-  dis_FR = measure_dist(DIST_FR);
-  dis_L = measure_dist(DIST_L);
-  dis_R = measure_dist(DIST_R);
-
-
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+
   while (1)
   {
 	  HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
@@ -145,9 +142,8 @@ int main(void)
 
 
     /* USER CODE END WHILE */
-
-    /* USER CODE BEGIN 3 */
   }
+    /* USER CODE BEGIN 3 */
   /* USER CODE END 3 */
 }
 
