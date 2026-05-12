@@ -23,6 +23,7 @@
 /* USER CODE BEGIN Includes */
 #include "Motor.h"
 #include "IR.h"
+#include "Control.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -123,24 +124,21 @@ int main(void)
   {
 	  HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
 
-	  HAL_GPIO_WritePin(ML_FWD_GPIO_Port, ML_FWD_Pin, GPIO_PIN_RESET);
-	  HAL_GPIO_WritePin(ML_BWD_GPIO_Port, ML_BWD_Pin, GPIO_PIN_RESET);
+//	  HAL_GPIO_WritePin(ML_FWD_GPIO_Port, ML_FWD_Pin, GPIO_PIN_SET);
+//	  HAL_GPIO_WritePin(ML_BWD_GPIO_Port, ML_BWD_Pin, GPIO_PIN_RESET);
+//
+//	  //right motor drive backwards
+//	  HAL_GPIO_WritePin(MR_FWD_GPIO_Port, MR_FWD_Pin, GPIO_PIN_SET);
+//	  HAL_GPIO_WritePin(MR_BWD_GPIO_Port, MR_BWD_Pin, GPIO_PIN_RESET);
+//	  htim2.Instance->CCR3 = 500;
+//	  htim2.Instance->CCR4 = 500;
 
-	  //right motor drive backwards
-	  HAL_GPIO_WritePin(MR_FWD_GPIO_Port, MR_FWD_Pin, GPIO_PIN_RESET);
-	  HAL_GPIO_WritePin(MR_BWD_GPIO_Port, MR_BWD_Pin, GPIO_PIN_RESET);
-
-	  dis_FL = measure_dist(DIST_FL) * SCALE_FL;
-	  dis_FR = measure_dist(DIST_FR) * SCALE_FR;
-	  dis_L = measure_dist(DIST_L) * SCALE_L;
-	  dis_R = measure_dist(DIST_R) * SCALE_R;
+	  dis_FL = measure_dist(DIST_FL);
+	  dis_L = measure_dist(DIST_L);
+	  dis_FR = measure_dist(DIST_FR);
+	  dis_R = measure_dist(DIST_R);
 
 	  HAL_Delay(1000);
-
-
-
-
-
     /* USER CODE END WHILE */
   }
     /* USER CODE BEGIN 3 */
